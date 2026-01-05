@@ -1,7 +1,7 @@
 const std = @import("std");
 const Walker = @import("std").fs.Dir.Walker;
 
-pub fn build(b: *std.Build) void {
+pub fn build(b: *std.Build) !void {
     const exe = b.addExecutable(.{
         .name = "relay",
         .root_module = b.createModule(.{
@@ -12,10 +12,10 @@ pub fn build(b: *std.Build) void {
     });
     b.installArtifact(exe);
 
-    unit_tests(b);
+    try unit_tests(b);
 }
 
-fn unit_tests(b: *std.Build) void {
+fn unit_tests(b: *std.Build) !void {
     const test_step = b.step("test", "Run all unit tests");
 
     var dir = b.build_root.handle.openDir("test", .{}) catch |err| {
@@ -28,7 +28,7 @@ fn unit_tests(b: *std.Build) void {
     defer walker.deinit();
 
     while (walker.next() catch null) |entry| {
-        create_individual_ut(b, test_step, entry);
+        try create_individual_ut(b, test_step, entry);
     }
 }
 
@@ -36,7 +36,7 @@ fn create_individual_ut(
     b: *std.Build,
     test_step: *std.Build.Step,
     entry: Walker.Entry,
-) void {
+) !void {
     if (entry.kind != .file and !std.mem.endsWith(u8, entry.path, ".test.zig")) {
         return;
     }
@@ -48,6 +48,14 @@ fn create_individual_ut(
             .target = b.graph.host,
             .optimize = .Debug,
         }),
+    });
+
+    const size = std.mem.replacementSize(u8, entry.path, ".test", "");
+    const output = try b.allocator.alloc(u8, size);
+    _ = std.mem.replace(u8, entry.path,".test" , "", output);
+    const src_path = b.pathJoin(&.{"src", output});
+    unit_test.root_module.addAnonymousImport(output, .{
+        .root_source_file = b.path(src_path),
     });
 
     const run_unit_test = b.addRunArtifact(unit_test);
