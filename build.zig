@@ -50,14 +50,6 @@ fn create_individual_ut(
         }),
     });
 
-    const size = std.mem.replacementSize(u8, entry.path, ".test", "");
-    const output = try b.allocator.alloc(u8, size);
-    _ = std.mem.replace(u8, entry.path,".test" , "", output);
-    const src_path = b.pathJoin(&.{"src", output});
-    unit_test.root_module.addAnonymousImport(output, .{
-        .root_source_file = b.path(src_path),
-    });
-
     const run_unit_test = b.addRunArtifact(unit_test);
     test_step.dependOn(&run_unit_test.step);
 
