@@ -1,4 +1,4 @@
-const Rect = @import("shape/Rectangle.zig");
+const Rect = @import("src/shape/Rectangle.zig");
 
 test "rectangleInit" {
     const rect = Rect{};
