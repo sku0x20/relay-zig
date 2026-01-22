@@ -9,6 +9,7 @@ ptr: *anyopaque,
 virtual_table: Shape_Virtual_Table,
 
 // kinda like golang interfaces; duck typing
+// ref https://www.openmymind.net/Zig-Interfaces/
 pub fn From(ptr: anytype) Shape {
     const T = @TypeOf(ptr);
     const ptr_info = @typeInfo(T);
