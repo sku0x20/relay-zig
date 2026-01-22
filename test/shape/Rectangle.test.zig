@@ -8,11 +8,13 @@ test "rectangleInit" {
 
 test "rectangleIsShape" {
     const rect = Rect{};
-    _ = Shape.From(&rect);
+    const shape = Shape.From(&rect);
+    shape.draw();
 }
 
 test "rectangleIsShape2" {
     var rect = Rect{};
     rect = Rect{};
-    _ = Shape.From(&rect);
+    const shape = Shape.From(&rect);
+    shape.draw();
 }

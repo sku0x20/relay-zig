@@ -24,6 +24,6 @@ pub fn From(ptr: anytype) Shape {
     };
 }
 
-fn draw(shape: *const Shape) void {
+pub fn draw(shape: *const Shape) void {
     _ = shape;
 }
