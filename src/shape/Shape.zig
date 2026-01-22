@@ -14,7 +14,7 @@ pub fn From(ptr: anytype) Shape {
     const vt_impl = struct {
         pub fn draw(impl: *anyopaque) void {
             const impl_casted: T = @ptrCast(@alignCast(impl));
-            return ptr_info.@"pointer".child.draw(impl_casted);
+            return ptr_info.pointer.child.draw(impl_casted);
         }
     };
     return .{
@@ -26,5 +26,5 @@ pub fn From(ptr: anytype) Shape {
 }
 
 pub fn draw(shape: *const Shape) void {
-    _ = shape;
+    return shape.virtual_table.draw(shape.ptr);
 }
