@@ -10,3 +10,9 @@ test "rectangleIsShape" {
     const rect = Rect{};
     _ = Shape.From(&rect);
 }
+
+test "rectangleIsShape2" {
+    var rect = Rect{};
+    rect = Rect{};
+    _ = Shape.From(&rect);
+}
