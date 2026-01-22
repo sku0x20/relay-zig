@@ -7,6 +7,7 @@ const Shape_Virtual_Table = struct {
 ptr: *anyopaque,
 virtual_table: Shape_Virtual_Table,
 
+// kinda like golang interfaces; duck typing
 pub fn From(ptr: anytype) Shape {
     const T = @TypeOf(ptr);
     const ptr_info = @typeInfo(T);
